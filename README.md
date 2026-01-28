@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Trade Bot
 Trade Bot is a personal automated trading system that monitors public congressional trade disclosures and automatically mirrors selected trades in your own brokerage account using the Alpaca API.
 
@@ -19,52 +20,26 @@ Fully configurable strategy logic
 
 Lightweight, modular Node.js  architecture
 
-📁 Project Structure
-Code
-trade-bot/
-│
-├── package.json
-├── .env
-├── README.md
-│
-├── src/
-│   ├── index.js
-│   ├── config/
-│   │   └── alpaca.js
-│   │
-│   ├── data/
-│   │   └── lastTrades.json
-│   │
-│   ├── services/
-│   │   ├── scraper.js
-│   │   ├── strategy.js
-│   │   └── trader.js
-│   │
-│   ├── utils/
-│   │   └── logger.js
-│   │
-│   └── storage/
-│       └── store.js
 🛠️ Installation
 1. Clone the project
-Code
-git clone https://github.com/yourusername/trade-bot
-cd trade-bot
+-- Code:
+-- git clone https://github.com/yourusername/trade-bot
+-- cd trade-bot
 2. Install dependencies
-Code
-npm install
+-- Code:
+--- npm install
 3. Create your .env file
-Code
-ALPACA_KEY=your_key_here
-ALPACA_SECRET=your_secret_here
+-- Code:
+-- ALPACA_KEY=your_key_here
+-- ALPACA_SECRET=your_secret_here
 4. Enable Alpaca paper trading
-Log in to Alpaca and ensure your account is set to paper trading mode.
+-- Log in to Alpaca and ensure your account is set to paper trading mode.
 
 ▶️ Running Trade Bot
 Start the bot:
 
-Code
-npm start
+-- Code:
+-- npm start
 Trade Bot will:
 
 Scrape public trade disclosures
@@ -128,8 +103,6 @@ Email
 
 SMS
 
-Just tell me and I’ll generate the module for you.
-
 ⚠️ Disclaimer
 Trade Bot is for personal, educational, and experimental use only.
 It does not guarantee profits, accuracy, or reliability.
@@ -138,18 +111,6 @@ You are responsible for all trades executed by this software.
 📄 License
 MIT License (or any license you prefer).
 
-If you want, I can also generate:
-
-A Telegram alert module
-
-A Discord bot module
-
-A web dashboard
-
-A Dockerfile
-
-A systemd service so Trade Bot runs 24/7 on a VPS
-
-A version that tracks all congressional trades, not just one politician
-
-Just tell me what you want Trade Bot to do next.
+=======
+"# trade-bot-1.0" 
+>>>>>>> f48d1215bafc0673609b73fbef6d647ee4aa3ee1
