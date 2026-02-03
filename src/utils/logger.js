@@ -1,3 +1,5 @@
-export function log(msg) {
-  console.log(`[${new Date().toISOString()}] ${msg}`);
-}
+// src/utils/logger.js
+module.exports = {
+  info: msg => console.log(`[INFO] ${msg}`),
+  error: msg => console.error(`[ERROR] ${msg}`)
+};

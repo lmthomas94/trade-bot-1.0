@@ -1,33 +1,78 @@
-import { getTrackedTrades } from "./services/scraper.js";
-import { generateOrders } from "./services/strategy.js";
-import { placeOrder } from "./services/trader.js";
-import { loadLastTrades, saveLastTrades } from "./storage/store.js";
-import { log } from "./utils/logger.js";
+// src/index.js
+require('dotenv').config();
+const { runStrategy } = require('./strategy/strategy');
+const { buy, sell, getPosition } = require('./services/trader');
+const { getLatestPrice } = require('./services/marketData');
+const logger = require('./utils/logger');
 
-async function runBot() {
-  log("Trade Bot started");
+const SYMBOL = 'AAPL';
+const MAX_DOLLARS_PER_TRADE = 10; // hard cap for your test
 
-  const lastTrades = loadLastTrades();
-  const trades = await getTrackedTrades();
+async function computeQuantity(symbol) {
+  const price = await getLatestPrice(symbol);
+  if (!price || price <= 0) {
+    logger.error('Invalid latest price, cannot compute quantity.');
+    return 0;
+  }
 
-  const newTrades = trades.filter(t => !lastTrades.includes(t.id));
+  const qty = Math.floor(MAX_DOLLARS_PER_TRADE / price);
 
-  if (newTrades.length === 0) {
-    log("No new trades detected");
+  if (qty < 1) {
+    logger.info(
+      `Price too high for $${MAX_DOLLARS_PER_TRADE}. Current price: $${price.toFixed(2)}`
+    );
+    return 0;
+  }
+
+  logger.info(`Computed quantity: ${qty} shares at ~$${price.toFixed(2)}`);
+  return qty;
+}
+
+async function tick() {
+  logger.info('Running strategy tick...');
+
+  const signal = await runStrategy(SYMBOL);
+  if (!signal) {
+    logger.info('No signal detected.');
     return;
   }
 
-  log(`Detected ${newTrades.length} new trades`);
+  logger.info(`Signal detected: ${signal.action}`);
 
-  const orders = generateOrders(newTrades);
+  const position = await getPosition(SYMBOL);
 
-  for (const order of orders) {
-    await placeOrder(order);
-    log(`Executed order: ${JSON.stringify(order)}`);
+  // BUY LOGIC
+  if (signal.action === 'BUY') {
+    if (position) {
+      logger.info('Position already open, skipping BUY.');
+      return;
+    }
+
+    const qty = await computeQuantity(SYMBOL);
+    if (qty < 1) {
+      logger.info('Quantity < 1, skipping BUY.');
+      return;
+    }
+
+    logger.info(`Placing BUY for ${qty} shares of ${SYMBOL}...`);
+    await buy(SYMBOL, qty);
+    return;
   }
 
-  saveLastTrades(trades.map(t => t.id));
+  // SELL LOGIC
+  if (signal.action === 'SELL') {
+    if (!position) {
+      logger.info('No open position, skipping SELL.');
+      return;
+    }
+
+    logger.info(`Placing SELL for ${position.qty} shares of ${SYMBOL}...`);
+    await sell(SYMBOL, position.qty);
+    return;
+  }
+
+  logger.info('Unknown signal action, doing nothing.');
 }
 
-setInterval(runBot, 1000 * 60 * 30); // every 30 minutes
-runBot();
+// Run every minute; keep your local machine on to monitor all day
+setInterval(tick, 60 * 1000);
