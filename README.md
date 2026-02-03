@@ -111,6 +111,33 @@ You are responsible for all trades executed by this software.
 📄 License
 MIT License (or any license you prefer).
 
+notes:
+
+what it will do:
+
+Watch AAPL all day
+
+Use only paper trading
+
+Never spend more than $10
+
+Only buy if:
+
+Double‑bottom pattern detected
+
+No open position
+
+Price allows at least 1 share
+
+Only sell if:
+
+You already hold a position
+
+Strategy signals SELL
+
+Runs every minute
+
+Safe, predictable, controlled
 =======
 "# trade-bot-1.0" 
 >>>>>>> f48d1215bafc0673609b73fbef6d647ee4aa3ee1

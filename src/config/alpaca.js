@@ -1,9 +1,7 @@
-import Alpaca from "@alpacahq/alpaca-trade-api";
-import dotenv from "dotenv";
+// src/config/alpaca.js
+const Alpaca = require('@alpacahq/alpaca-trade-api');
 
-dotenv.config();
-
-export const alpaca = new Alpaca({
+module.exports = new Alpaca({
   keyId: process.env.ALPACA_KEY,
   secretKey: process.env.ALPACA_SECRET,
   paper: true
